@@ -55,4 +55,10 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: us-east-1
           S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
-        run: cd "${{ matrix.category }}" && python main.py
+        run: |
+          cd "${{ matrix.category }}"
+          if [ "${{ matrix.category }}" = "Used Car" ]; then
+            python main_used_cars.py
+          else
+            python main.py
+          fi
