@@ -12,6 +12,10 @@ from bs4 import BeautifulSoup
 
 from details_scraping import DetailsScraping
 from car_scraper import CarScraper
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from scraper_utils import get_random_headers, random_delay, rotate_user_agent
 
 logging.basicConfig(
     level=logging.INFO,
@@ -29,9 +33,7 @@ class MainScraper:
         self.chunk_delay = 5
         self.yesterday = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
         self.session = requests.Session()
-        self.session.headers.update({
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-        })
+        self.session.headers.update(get_random_headers())
         logger.info(f"Scraping data for date: {self.yesterday}")
 
     async def upload_bytes_to_s3(self, data_bytes, s3_path):
@@ -54,6 +56,8 @@ class MainScraper:
                 f"images/{brand_name}/{filename}"
             )
 
+            random_delay(1.0, 3.0)  # Random delay before request
+            rotate_user_agent(self.session)  # Rotate user agent
             response = self.session.get(url, timeout=30)
 
             if response.status_code != 200:
@@ -79,6 +83,8 @@ class MainScraper:
                 type_page_url = car_type["type_link"]
 
                 try:
+                    random_delay(1.0, 3.0)  # Random delay before request
+                    rotate_user_agent(self.session)  # Rotate user agent
                     response = self.session.get(type_page_url, timeout=30)
                     response.raise_for_status()
                     

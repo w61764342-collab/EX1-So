@@ -4,6 +4,10 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from scraper_utils import get_random_headers, random_delay, rotate_user_agent
 
 logger = logging.getLogger(__name__)
 
@@ -12,13 +16,13 @@ class PropertyDetailsScraper:
         self.listing_page_url = listing_page_url
         self.browser = browser
         self.session = requests.Session()
-        self.session.headers.update({
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-        })
+        self.session.headers.update(get_random_headers())
 
     async def get_listings(self):
         listings_data = []
         try:
+            random_delay(1.0, 3.0)  # Random delay before request
+            rotate_user_agent(self.session)  # Rotate user agent
             response = self.session.get(self.listing_page_url, timeout=30)
             response.raise_for_status()
             
@@ -85,6 +89,8 @@ class PropertyDetailsScraper:
             else:
                 logger.debug(f"Fetching detail page: {url}")
             
+            random_delay(1.0, 3.0)  # Random delay before request
+            rotate_user_agent(self.session)  # Rotate user agent
             response = self.session.get(url, timeout=30)
             response.raise_for_status()
             

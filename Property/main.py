@@ -7,6 +7,10 @@ import requests
 from bs4 import BeautifulSoup
 from details_scraping import PropertyDetailsScraper
 from s3_uploader import S3Uploader
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from scraper_utils import get_random_headers, random_delay, rotate_user_agent
 
 # Setup logging
 logging.basicConfig(
@@ -23,13 +27,13 @@ s3 = S3Uploader(AWS_BUCKET)
 
 BASE_URL = "https://www.q84sale.com/ar/property"
 SESSION = requests.Session()
-SESSION.headers.update({
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-})
+SESSION.headers.update(get_random_headers())
 
 async def get_property_subcategories():
     logger.info(f"Fetching property subcategories from {BASE_URL}")
     try:
+        random_delay(1.0, 3.0)  # Random delay before request
+        rotate_user_agent(SESSION)  # Rotate user agent
         response = SESSION.get(BASE_URL, timeout=30)
         response.raise_for_status()
         
@@ -46,6 +50,8 @@ async def get_property_subcategories():
 
 async def get_business_listings(url):
     try:
+        random_delay(1.0, 3.0)  # Random delay before request
+        rotate_user_agent(SESSION)  # Rotate user agent
         response = SESSION.get(url, timeout=30)
         response.raise_for_status()
         
@@ -78,6 +84,8 @@ async def scrape_subcategory(subcat):
 
     # Load first page
     try:
+        random_delay(1.0, 3.0)  # Random delay before request
+        rotate_user_agent(SESSION)  # Rotate user agent
         response = SESSION.get(base_url.format(1), timeout=30)
         response.raise_for_status()
         

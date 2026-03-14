@@ -1,20 +1,24 @@
 import json
 import requests
 from bs4 import BeautifulSoup
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from scraper_utils import get_random_headers, random_delay, rotate_user_agent
 
 class CarScraper:
     def __init__(self, url):
         self.url = url
         self.base_url = "https://www.q84sale.com"
         self.session = requests.Session()
-        self.session.headers.update({
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-        })
+        self.session.headers.update(get_random_headers())
         self.data = []
 
     async def scrape_brands_and_types(self):
         try:
             # Fetch main page
+            random_delay(1.0, 3.0)  # Random delay before request
+            rotate_user_agent(self.session)  # Rotate user agent
             response = self.session.get(self.url, timeout=30)
             response.raise_for_status()
             
@@ -54,6 +58,8 @@ class CarScraper:
 
     async def scrape_types(self, brand_link):
         try:
+            random_delay(1.0, 3.0)  # Random delay before request
+            rotate_user_agent(self.session)  # Rotate user agent
             response = self.session.get(brand_link, timeout=30)
             response.raise_for_status()
             
