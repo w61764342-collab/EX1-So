@@ -22,6 +22,9 @@ on:
           - Commercials
           - Contracting
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   scrape:
     runs-on: ubuntu-latest
