@@ -27,8 +27,6 @@ class WantedCarsJsonScraper:
         self.base_url = "https://www.q84sale.com/ar/automotive/wanted-cars"
         self.session = requests.Session()
         self.session.headers.update(get_random_headers())
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-        })
         
     async def init_browser(self):
         """Compatibility method - not needed with BeautifulSoup"""
