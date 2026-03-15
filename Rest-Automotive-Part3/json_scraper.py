@@ -32,7 +32,6 @@ class RestAutomotiveJsonScraper:
         }
         self.session = requests.Session()
         self.session.headers.update(get_random_headers())
-        })
         
     async def init_browser(self):
         """Compatibility method - not needed with BeautifulSoup"""

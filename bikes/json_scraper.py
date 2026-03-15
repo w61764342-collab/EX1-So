@@ -6,10 +6,12 @@ import requests
 from bs4 import BeautifulSoup
 from typing import List, Dict, Optional
 from datetime import datetime, timedelta
-from dateutil.relativedelta import relativedeltaimport sys
+from dateutil.relativedelta import relativedelta
+import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scraper_utils import get_random_headers, random_delay, rotate_user_agent
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
