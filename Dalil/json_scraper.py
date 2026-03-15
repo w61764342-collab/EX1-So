@@ -26,7 +26,8 @@ class DalilJsonScraper:
     
     def __init__(self):
         self.base_url = "https://directory.q84sale.com/ar"
-        self.session = requests.Session()\n        self.session.headers.update(get_random_headers())
+        self.session = requests.Session()
+        self.session.headers.update(get_random_headers())
         
         # All category slugs
         self.categories = [
